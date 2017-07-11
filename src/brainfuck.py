@@ -82,12 +82,12 @@ class Interpreter:
         self.verb("Looping: {}".format(code))
         self.verb("Looping depth is {}.".format(self.loop_depth))
         while self.memory.read() != 0:
-            self.interpret_all(code, line=line)
+            self.interpret_all(code, line=line, raiseExc=True)
         self.verb("Exited a loop.")
         self.verb("Looping depth is {}.".format(self.loop_depth))
         self.loop_depth -= 1
 
-    def interpret_all(self, code, line=1):
+    def interpret_all(self, code, line=1, raiseExc=False):
         if not self.running:
             return
         x = 0
@@ -120,12 +120,18 @@ class Interpreter:
                 self.interpret_char(char)
                 x += 1
             except Exception as e:
-                self.running = False
-                self.out("Error on line {}\n".format(line))
-                self.out(str(e) + "\n")
+                if not raiseExc:
+                    self.running = False
+                    self.out("Error on line {}\n".format(line))
+                    self.out(str(e) + "\n")
+                else:
+                    raise e
             except KeyboardInterrupt as e:
-                self.running = False
-                self.out("Keyboard interrupt on line {}\n".format(line))
+                if not raiseExc:
+                    self.running = False
+                    self.out("\nKeyboard interrupt on line {}\n".format(line))
+                else:
+                    raise e
 
 class Memory:
 
