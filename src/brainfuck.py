@@ -41,16 +41,16 @@ class Interpreter:
         if not self.running:
             return
         if char == '<':
-            self.verb("Action: mouve left")
+            self.verb("Action: move left")
             self.memory.mouve_left()
-            self.verb("Mouved left")
+            self.verb("Moved left")
             self.verb("Memory:")
             self.verb(str(self.memory))
             self.verb("")
         elif char == '>':
-            self.verb("Action: mouve right")
+            self.verb("Action: move right")
             self.memory.mouve_right()
-            self.verb("Mouved right")
+            self.verb("Moved right")
             self.verb("Memory:")
             self.verb(str(self.memory))
             self.verb("")
