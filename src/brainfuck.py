@@ -6,7 +6,8 @@ class Interpreter:
     def __init__(self,
             stdin=sys.stdin,
             stdout=sys.stdout,
-            verbose=False):
+            verbose=False,
+            stop_on_error=True):
         self.stdin = stdin
         self.stdout = stdout
         self.verbose = verbose
@@ -18,9 +19,16 @@ class Interpreter:
         self.verb(str(self.memory))
         self.loop_depth = 0
         self.verb("Initialized looping depth counter.")
+        self.stop_on_error = stop_on_error
         self.running = True
         self.verb("Running.")
         self.verb("")
+
+    def on_error(self):
+     self.verb("ERROR!")
+     if self.stop_on_error:
+      self.verb("We were told to stop on error, setting running to False!")
+      self.running = False
 
     def verb(self, message):
         if self.verbose:
@@ -72,7 +80,7 @@ class Interpreter:
             self.verb("Action: show")
             self.out(chr(self.memory.read()))
         elif char == ",":
-            self.verb("Action: show")
+            self.verb("Action: read")
             self.memory.write(self.read_stdin())
 
     def loop(self, code, line):
@@ -110,10 +118,9 @@ class Interpreter:
                             openned -= 1
                     if openned > 0:
                         self.out("Error: Excepted ']' on line {}\n".format(loopline))
-                        self.running = False
+                        self.on_error()
                     else:
                         self.loop(code[x+1: i], line=line)
-
                         x = i + 1
                         continue
 
@@ -121,15 +128,15 @@ class Interpreter:
                 x += 1
             except Exception as e:
                 if not raiseExc:
-                    self.running = False
                     self.out("Error on line {}\n".format(line))
                     self.out(str(e) + "\n")
+                    self.on_error()
                 else:
                     raise e
             except KeyboardInterrupt as e:
                 if not raiseExc:
-                    self.running = False
                     self.out("\nKeyboard interrupt on line {}\n".format(line))
+                    self.on_error()
                 else:
                     raise e
 
