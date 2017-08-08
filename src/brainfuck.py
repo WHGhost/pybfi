@@ -109,7 +109,7 @@ class Interpreter:
                         elif code[i] == ']':
                             openned -= 1
                     if openned > 0:
-                        self.out("Error: Excepted ']' on line {}".format(loopline))
+                        self.out("Error: Excepted ']' on line {}\n".format(loopline))
                         self.running = False
                     else:
                         self.loop(code[x+1: i], line=line)
