@@ -42,14 +42,14 @@ class Interpreter:
             return
         if char == '<':
             self.verb("Action: move left")
-            self.memory.mouve_left()
+            self.memory.move_left()
             self.verb("Moved left")
             self.verb("Memory:")
             self.verb(str(self.memory))
             self.verb("")
         elif char == '>':
             self.verb("Action: move right")
-            self.memory.mouve_right()
+            self.memory.move_right()
             self.verb("Moved right")
             self.verb("Memory:")
             self.verb(str(self.memory))
@@ -146,12 +146,12 @@ class Memory:
     def write(self, val):
         self.mem[self.pointer + self.delta] = val
 
-    def mouve_right(self):
+    def move_right(self):
         if len(self.mem) <= self.pointer + self.delta + 1:
             self.mem.append(0)
         self.pointer += 1
 
-    def mouve_left(self):
+    def move_left(self):
         if 0 > self.pointer + self.delta - 1:
             self.mem.insert(0, 0)
             self.delta += 1
